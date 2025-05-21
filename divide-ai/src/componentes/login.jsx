@@ -5,7 +5,17 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import GoogleIcon from '@mui/icons-material/Google';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Button, ButtonGroup, colors } from '@mui/material';
+
+const theme = createTheme({
+  palette: {
+    botaoprimario: {
+      main: 'rgb(255, 255, 255)',
+      contrastText:"#006bff",
+    },
+  },
+});
 
 const CssTextField = styled(TextField)({
   '& label': {
@@ -38,26 +48,45 @@ const CssTextField = styled(TextField)({
 
 
 const Login = () => {
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    //lidar login etc
+    console.log("logando... 🔍");
+  };
+
+  const handleGoogleLogin = (event) => {
+    event.preventDefault();
+    //lidar login etc
+    console.log("googlogando... 🔍");
+
+  };
+
   return (
     <Box>
       <header>
         <h1 style={{fontFamily: "'Jersey 15'", color: "white", fontSize: 40}}>login</h1>
       </header>
-      <Box id='main' sx={{display: "grid", gap: 2, mt: 2}}>
-        <CssTextField label="insira seu email" type='email' fullWidth variant='outlined'/>
-        <CssTextField label="insira sua senha" type='password' fullWidth variant='outlined'/>
-        <ButtonGroup
-            disableElevation
-            variant="contained"
-            aria-label="Disabled button group"
-          >
-            <Button fullWidth color="success">Entrar</Button>
-            <Button color='success' endIcon={<GoogleIcon />}/>
-          </ButtonGroup>
-        <Box id="other-actions" sx={{alignItems: "center", textAlign: "center"}}>
-            <a><p style={{color: '#b70004', fontFamily: "'Jersey 15'", fontSize: 20}}>esqueceu a senha?</p></a>
+      <form onSubmit={handleSubmit}>
+        <Box id='main' sx={{display: "grid", gap: 2, mt: 2}}>
+          <CssTextField label="insira seu email" type='email' fullWidth variant='outlined'/>
+          <CssTextField label="insira sua senha" type='password' fullWidth variant='outlined'/>
+          <ButtonGroup
+              disableElevation
+              variant="contained"
+              aria-label="Disabled button group"
+            >
+              <ThemeProvider theme={theme}>
+                <Button type='submit' fullWidth  color="botaoprimario" >Entrar</Button>
+                <Button onClick={handleGoogleLogin} variant="outlined" sx={{ borderColor: "white", color: "white" }} endIcon={<GoogleIcon sx={{color:"white"}}/>}/>
+              </ThemeProvider>
+              
+            </ButtonGroup>
+          <Box id="other-actions" sx={{alignItems: "center", textAlign: "center", mb: 3}}>
+            <p style={{color: 'white', fontFamily: "'Jersey 15'", fontSize: 20}}> <a>esqueceu a senha?</a></p>
+          </Box>
         </Box>
-      </Box>
+      </form>
     </Box>
   )
 }
