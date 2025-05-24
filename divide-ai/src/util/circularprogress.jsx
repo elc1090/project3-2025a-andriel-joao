@@ -39,7 +39,7 @@ function CircularProgressWithSeconds({ secondsLeft, totalSeconds }) {
   );
 }
 
-export default function TimerWithCircularProgress({ onTimeEnd, totalSeconds = 120 }) {
+export default function TimerWithCircularProgress({ onTimeEnd, totalSeconds = 20 }) {
   const [secondsLeft, setSecondsLeft] = React.useState(totalSeconds);
 
   React.useEffect(() => {
