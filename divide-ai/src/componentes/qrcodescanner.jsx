@@ -36,7 +36,7 @@ const QrCodeScanner = () => {
   };
 
   return (
-    <Box sx={{ mt: 20}}>
+    <Box sx={{ mt: 5}}>
       <BarcodeScanner
         width={500}
         height={500}
@@ -65,7 +65,7 @@ const QrCodeScanner = () => {
         </DialogTitle>
         <DialogContent>
           <p style={{ fontFamily: "'Roboto", color: "white"}}>
-            Não foi possível identificar um QR Code em 30 segundos. 
+            Não foi possível identificar um QR Code no tempo estimado. 
           </p>
           <br/>
           <p style={{ fontFamily: "'Roboto", color: "white"}}> 
