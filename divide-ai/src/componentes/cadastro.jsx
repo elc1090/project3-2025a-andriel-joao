@@ -60,7 +60,7 @@ const Cadastro = () => {
     const {data: response} = await axios.post(backendServerUrl + "/register", formData);
     console.log(response);
     console.log("cadastrando... 🔍");
-
+    window.location.href = "/";
   };
 
   const [formData, setFormData] = useState({
