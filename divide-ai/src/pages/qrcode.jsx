@@ -21,7 +21,7 @@ import LinkIcon from "@mui/icons-material/Link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { backendServerUrl } from "../config/backendIntegration";
 const theme = createTheme({
   palette: {
     botaoprimario: {
@@ -47,10 +47,10 @@ const QrCode = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post("/purchase", { url: urlInput });
+      const response = await axios.post(backendServerUrl+"/purchase", { url: urlInput });
       const purchaseData = response.data;
 
-      navigate("/tabela", { state: { url: urlInput, purchaseData } });
+      navigate("/table", { state: { url: urlInput, purchaseData } });
     } catch (err) {
       setUrlError("Erro ao extrair dados da nota. Verifique a URL.");
     } finally {

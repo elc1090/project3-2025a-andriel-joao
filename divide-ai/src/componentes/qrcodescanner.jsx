@@ -13,6 +13,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import TimerWithCircularProgress from '../util/circularprogress';
 import { useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { backendServerUrl } from '../config/backendIntegration';
 import axios from 'axios';
 
 const theme = createTheme({
@@ -37,11 +38,11 @@ const QrCodeScanner = () => {
       setLoading(true);
 
       try {
-        const response = await axios.post('/purchase', { url });
+        const response = await axios.post(backendServerUrl + '/purchase', { url });
         const purchaseData = response.data;
 
         // Redireciona para a tela com os dados extraídos
-        navigate('/tabela', { state: { url, purchaseData } });
+        navigate('/table', { state: { url, purchaseData } });
       } catch (error) {
         console.error('Erro ao validar QR Code:', error);
         setData('QR Code inválido ou erro na extração da nota.');
