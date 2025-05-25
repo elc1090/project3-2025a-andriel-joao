@@ -5,6 +5,8 @@ import { styled } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import axios from 'axios';
+import { backendServerUrl } from '../config/backendIntegration';
 const theme = createTheme({
   palette: {
     botaoprimario: {
@@ -40,7 +42,8 @@ const CssTextField = styled(TextField)({
   },
 });
 
-const Cadastro = () => {
+const Cadastro = ({navigate}) => {
+
   const [step, setStep] = useState(0);
 
   const handleNext = () => {
@@ -51,11 +54,18 @@ const Cadastro = () => {
     setStep((prev) => Math.max(prev - 1, 0));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     //lidar cadastro etc
-    console.log("cadastrando... 🔍");
 
+    const {data: response} = await axios.post(backendServerUrl + "/register", formData);
+    console.log(response);
+    console.log("cadastrando... 🔍");
+    if (response.type === "Success") {
+      navigate("/");
+    } else {
+      alert(response.message);
+    }
   };
 
   const [formData, setFormData] = useState({

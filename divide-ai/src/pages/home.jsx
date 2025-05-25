@@ -7,6 +7,7 @@ import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '../util/sidebar';
+import { backendServerUrl } from '../config/backendIntegration';
 
 const Home = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -14,7 +15,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('/api/notas')
+    axios.get(backendServerUrl + '/purchase', { withCredentials: true })
       .then(res => {
         // Suponha que o retorno esperado seja um array diretamente
         if (Array.isArray(res.data)) {
@@ -81,12 +82,12 @@ const Home = () => {
               }}
             >
               <Typography variant="subtitle1" fontWeight="bold">
-                {nota.estabelecimento}
+                {nota.storeName}
               </Typography>
-              <Typography variant="body2">Data de Emissão: {nota.data_emissao}</Typography>
-              <Typography variant="body2">Data do Scan: {nota.data_scan}</Typography>
-              <Typography variant="body2">Devedores: {nota.qtd_devedores}</Typography>
-              <Typography variant="body2">Total: R$ {nota.valor_total_compra}</Typography>
+              <Typography variant="body2">Data de Emissão: {nota.purchaseDate}</Typography>
+              <Typography variant="body2">Data do Scan: {nota.scanDate}</Typography>
+              <Typography variant="body2">Devedores: {nota.payers.length}</Typography>
+              <Typography variant="body2">Total: R$ {nota.totalValue}</Typography>
             </Box>
           ))
         ) : (
