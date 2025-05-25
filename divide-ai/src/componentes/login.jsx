@@ -7,6 +7,8 @@ import FormControl from '@mui/material/FormControl';
 import GoogleIcon from '@mui/icons-material/Google';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Button, ButtonGroup, colors } from '@mui/material';
+import { backendServerUrl } from '../config/backendIntegration';
+import axios from 'axios';
 
 const theme = createTheme({
   palette: {
@@ -49,9 +51,26 @@ const CssTextField = styled(TextField)({
 
 const Login = () => {
 
-  const handleSubmit = (event) => {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     //lidar login etc
+
+    const formValues = {
+      email: email,
+      password: password,
+    }
+
+    const { data: response} = await axios.post(backendServerUrl + "/login", formValues, { withCredentials: true });
+    console.log(response.type);
+    if (response.type === "Success") {
+      window.location = '/home';
+    } else {
+      alert(response.message);
+    }
+    
     console.log("logando... 🔍");
   };
 
@@ -69,8 +88,8 @@ const Login = () => {
       </header>
       <form onSubmit={handleSubmit}>
         <Box id='main' sx={{display: "grid", gap: 2, mt: 2}}>
-          <CssTextField label="insira seu email" type='email' fullWidth variant='outlined'/>
-          <CssTextField label="insira sua senha" type='password' fullWidth variant='outlined'/>
+          <CssTextField label="insira seu email" type='email' onChange={(e) => setEmail(e.target.value)} fullWidth variant='outlined'/>
+          <CssTextField label="insira sua senha" type='password' onChange={(e) => setPassword(e.target.value)} fullWidth variant='outlined'/>
           <ButtonGroup
               disableElevation
               variant="contained"
