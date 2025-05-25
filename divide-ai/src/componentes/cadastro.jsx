@@ -42,7 +42,8 @@ const CssTextField = styled(TextField)({
   },
 });
 
-const Cadastro = () => {
+const Cadastro = ({navigate}) => {
+
   const [step, setStep] = useState(0);
 
   const handleNext = () => {
@@ -61,7 +62,7 @@ const Cadastro = () => {
     console.log(response);
     console.log("cadastrando... 🔍");
     if (response.type === "Success") {
-      window.location.href = "/";
+      navigate("/");
     } else {
       alert(response.message);
     }

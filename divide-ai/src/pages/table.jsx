@@ -1,9 +1,25 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Box, ButtonGroup, colors, Dialog, DialogTitle, DialogContent, DialogActions, Button} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+import { backendServerUrl } from '../config/backendIntegration';
 
 const Table = () => {
+
+  const location = useLocation();
+  const url = location.state?.url;
+
+  useEffect(() => {
+    const effect = async () => {
+      if (url) {
+        const {data: response} = await axios.post(backendServerUrl + "/purchase", { url: url }, { withCredentials: true });
+        console.log(response);
+      }
+    }
+    effect();
+  }, [])
+
   return (
     <Box
       sx={{
@@ -17,6 +33,7 @@ const Table = () => {
           justifyContent: "center",
       }}
   >
+    {url}
   </Box>
   )
 }

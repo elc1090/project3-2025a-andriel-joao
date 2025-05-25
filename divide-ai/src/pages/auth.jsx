@@ -3,7 +3,11 @@ import { Box, Container, Button, Paper } from '@mui/material';
 import Cadastro from '../componentes/Cadastro';
 import Login from '../componentes/Login';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import { useNavigate } from 'react-router-dom';
 const AuthPage = () => {
+
+  const navigate = useNavigate();
+
   const [etapa, setEtapa] = useState("inicio"); // "inicio" | "login" | "cadastro"
   const [direction, setDirection] = useState("left");
 
@@ -62,7 +66,7 @@ const AuthPage = () => {
         key={etapa}
         className={direction === "left" ? "fade-slide-left" : "fade-slide-right"}
       >
-        {etapa === "login" ? <Login /> : <Cadastro />}
+        {etapa === "login" ? <Login navigate={navigate} /> : <Cadastro navigate={navigate} />}
         <Button variant="text" sx={{ mt: 2, color: "white" }} onClick={handleVoltar} endIcon={<KeyboardReturnIcon/>}>
           Home
         </Button>

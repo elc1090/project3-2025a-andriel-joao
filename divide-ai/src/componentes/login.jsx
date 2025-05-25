@@ -49,7 +49,7 @@ const CssTextField = styled(TextField)({
 });
 
 
-const Login = () => {
+const Login = ({navigate}) => {
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -66,7 +66,7 @@ const Login = () => {
     const { data: response} = await axios.post(backendServerUrl + "/login", formValues, { withCredentials: true });
     console.log(response.type);
     if (response.type === "Success") {
-      window.location = '/home';
+       navigate("/home");
     } else {
       alert(response.message);
     }
