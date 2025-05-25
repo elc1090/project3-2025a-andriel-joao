@@ -18,7 +18,7 @@ function App() {
         <Route path="/" element={<AuthPage />} />
         <Route path="/home" element={<Home />} />
         <Route path="/qrcode" element={<QrCode />} />
-        <Route path="/tabela" element={<Table />} />
+        <Route path="/table" element={<Table />} />
         <Route path="/profile" element={<Profile />}/>
         <Route path="/notas" element={<Notas />}/>
         {/* Rota coringa para páginas não encontradas */}

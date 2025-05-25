@@ -8,6 +8,10 @@ import {
   Button,
   ButtonGroup,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Sidebar from "../util/sidebar";
@@ -15,6 +19,8 @@ import QrCodeScanner from "../componentes/qrcodescanner";
 import { ThemeProvider, createTheme } from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme({
   palette: {
@@ -27,6 +33,30 @@ const theme = createTheme({
 
 const QrCode = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [urlInput, setUrlInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [urlError, setUrlError] = useState("");
+  const navigate = useNavigate();
+
+  const handleUrlSubmit = async () => {
+    if (!urlInput.trim()) {
+      setUrlError("Informe a URL da nota.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post("/purchase", { url: urlInput });
+      const purchaseData = response.data;
+
+      navigate("/tabela", { state: { url: urlInput, purchaseData } });
+    } catch (err) {
+      setUrlError("Erro ao extrair dados da nota. Verifique a URL.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -67,6 +97,7 @@ const QrCode = () => {
         <Sidebar drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
 
         <QrCodeScanner />
+
         <Box id="footer">
           <ButtonGroup sx={{ display: "grid", gap: 3 }}>
             <ThemeProvider theme={theme}>
@@ -77,6 +108,11 @@ const QrCode = () => {
                   size={"large"}
                   sx={{ width: 300 }}
                   endIcon={<LinkIcon />}
+                  onClick={() => {
+                    setUrlInput("");
+                    setUrlError("");
+                    setOpenDialog(true);
+                  }}
                 >
                   Tem o link da nota?
                 </Button>
@@ -95,6 +131,34 @@ const QrCode = () => {
           </ButtonGroup>
         </Box>
       </Box>
+
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>Insira a URL da nota fiscal</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            fullWidth
+            margin="dense"
+            label="URL da Nota"
+            type="url"
+            value={urlInput}
+            onChange={(e) => {
+              setUrlInput(e.target.value);
+              setUrlError("");
+            }}
+            error={!!urlError}
+            helperText={urlError}
+          />
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: "space-between", px: 3 }}>
+          <Button onClick={() => setOpenDialog(false)} color="error">
+            Cancelar
+          </Button>
+          <Button onClick={handleUrlSubmit} disabled={loading}>
+            {loading ? "Validando..." : "Confirmar"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
