@@ -7,6 +7,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
 import { backendServerUrl } from '../config/backendIntegration';
+
 const theme = createTheme({
   palette: {
     botaoprimario: {

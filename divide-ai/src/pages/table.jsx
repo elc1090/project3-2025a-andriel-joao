@@ -1,24 +1,74 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { AppBar, Toolbar, IconButton, Typography, Box } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Button,
+  Box,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import axios from "axios";
+
 import Sidebar from "../util/sidebar";
 import NFCDataGrid from "../componentes/nfcgrid";
 import PeopleInputDialog from "../componentes/dialogs/peopleinputdialog";
+import CustomDialog from "../componentes/caixadialogo";
+
 const Table = () => {
   const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(true); // Abre assim que carregar
+  const [dialogOpen, setDialogOpen] = useState(true);
   const [people, setPeople] = useState([]);
+  const [feedbackDialog, setFeedbackDialog] = useState({
+    open: false,
+    title: "",
+    content: "",
+    iconSrc: null,
+  });
+
   const { purchaseData } = location.state || {};
-  
+
   const handleDialogClose = () => {
-    // Não fecha o diálogo até que o usuário envie os dados corretamente
+    // Não fecha sem submissão
   };
 
-  const handleDialogSubmit = (peopleNames) => {
+  const handleDialogSubmit = async (peopleNames) => {
     setPeople(peopleNames);
-    setDialogOpen(false); // Fecha o diálogo após submissão
+    setDialogOpen(false);
+
+    if (!purchaseData?.purchaseId) {
+      setFeedbackDialog({
+        open: true,
+        title: "Erro",
+        content: "ID da compra não encontrado.",
+        iconSrc: "/caution.png", 
+      });
+      return;
+    }
+
+    try {
+      await axios.put("/purchase", {
+        id: purchaseData.purchaseId,
+        payers: peopleNames,
+      });
+
+      setFeedbackDialog({
+        open: true,
+        title: "Sucesso",
+        content: "Pagadores registrados com sucesso!",
+        iconSrc: "/verified.png",
+      });
+    } catch (error) {
+      console.error(error);
+      setFeedbackDialog({
+        open: true,
+        title: "Erro",
+        content: "Falha ao registrar pagadores.",
+        iconSrc: "/caution.png",
+      });
+    }
   };
 
   return (
@@ -49,17 +99,16 @@ const Table = () => {
         onClose={handleDialogClose}
         onSubmit={handleDialogSubmit}
       />
-      {/* Conteúdo renderizado apenas se purchaseData existir */}
+
       <Box sx={{ mt: 10, px: 2 }}>
         {purchaseData?.items &&
         purchaseData?.totalValue !== undefined &&
-        purchaseData?.numPeople &&
-        purchaseData?.peopleNames ? (
+        people.length > 0 ? (
           <NFCDataGrid
             data={purchaseData.items}
             totalValue={purchaseData.totalValue}
-            numPeople={purchaseData.numPeople}
-            peopleNames={purchaseData.peopleNames}
+            numPeople={people.length}
+            peopleNames={people}
           />
         ) : (
           <Box
@@ -83,6 +132,19 @@ const Table = () => {
           </Box>
         )}
       </Box>
+
+      <CustomDialog
+        open={feedbackDialog.open}
+        onClose={() => setFeedbackDialog({ ...feedbackDialog, open: false })}
+        title={feedbackDialog.title}
+        content={feedbackDialog.content}
+        iconSrc={feedbackDialog.iconSrc}
+        actions={[
+          <Button onClick={() => setFeedbackDialog({ ...feedbackDialog, open: false })} variant="contained" sx={{ backgroundColor: "white" }}>
+            <p style={{ color: "#006bff", fontFamily: "'Roboto'", margin: 0 }}>OK</p>
+          </Button>
+        ]}
+      />
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import BarcodeScanner from 'react-qr-barcode-scanner';
 import {
   Box,
@@ -29,19 +29,20 @@ const QrCodeScanner = () => {
   const [data, setData] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const timerRef = useRef(null); 
   const navigate = useNavigate();
 
   const handleQrCodeReaded = async (err, result) => {
     if (result?.text) {
       const url = result.text;
+
+      timerRef.current?.stopTimer(); // para o timer
       setData(url);
       setLoading(true);
 
       try {
         const response = await axios.post(backendServerUrl + '/purchase', { url });
         const purchaseData = response.data;
-
-        // Redireciona para a tela com os dados extraídos
         navigate('/table', { state: { url, purchaseData } });
       } catch (error) {
         console.error('Erro ao validar QR Code:', error);
@@ -71,7 +72,7 @@ const QrCodeScanner = () => {
         <p style={{ fontFamily: "'Jersey 15'", fontSize: 32, color: 'white' }}>
           {data || 'Buscando...'}
         </p>
-        <TimerWithCircularProgress onTimeEnd={() => setOpenModal(true)} />
+        <TimerWithCircularProgress ref={timerRef} onTimeEnd={() => setOpenModal(true)} />
       </Box>
 
       <Dialog

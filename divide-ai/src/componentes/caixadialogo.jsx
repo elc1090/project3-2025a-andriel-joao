@@ -6,8 +6,16 @@ import {
   DialogActions,
   ButtonGroup
 } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '../theme'; // ou defina localmente
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    botaoprimario: {
+      main: 'rgb(255, 255, 255)',
+      contrastText: '#006bff',
+    },
+  },
+});
 
 const CustomDialog = ({
   open,

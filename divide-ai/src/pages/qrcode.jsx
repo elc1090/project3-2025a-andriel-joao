@@ -49,7 +49,7 @@ const QrCode = () => {
     try {
       const response = await axios.post(backendServerUrl+"/purchase", { url: urlInput });
       const purchaseData = response.data;
-
+      console.log(purchaseData)
       navigate("/table", { state: { url: urlInput, purchaseData } });
     } catch (err) {
       setUrlError("Erro ao extrair dados da nota. Verifique a URL.");

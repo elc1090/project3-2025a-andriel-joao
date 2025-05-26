@@ -39,22 +39,34 @@ function CircularProgressWithSeconds({ secondsLeft, totalSeconds }) {
   );
 }
 
-export default function TimerWithCircularProgress({ onTimeEnd, totalSeconds = 20 }) {
+const TimerWithCircularProgress = React.forwardRef(({ onTimeEnd, totalSeconds = 20 }, ref) => {
   const [secondsLeft, setSecondsLeft] = React.useState(totalSeconds);
+  const timerRef = React.useRef(null);
+
+  const stopTimer = () => {
+    clearInterval(timerRef.current);
+  };
+
+  React.useImperativeHandle(ref, () => ({
+    stopTimer,
+  }));
 
   React.useEffect(() => {
-    const timer = setInterval(() => {
+    timerRef.current = setInterval(() => {
       setSecondsLeft((prev) => {
         if (prev <= 1) {
-          clearInterval(timer);
+          clearInterval(timerRef.current);
           if (onTimeEnd) onTimeEnd();
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
-    return () => clearInterval(timer);
+
+    return () => clearInterval(timerRef.current);
   }, [onTimeEnd]);
 
   return <CircularProgressWithSeconds secondsLeft={secondsLeft} totalSeconds={totalSeconds} />;
-}
+});
+
+export default TimerWithCircularProgress;
