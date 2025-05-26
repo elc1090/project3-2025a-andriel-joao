@@ -39,7 +39,6 @@ const Table = () => {
     setDialogOpen(false);
 
     if (!purchaseData?.purchaseId) {
-      console.log("oie 1")
       setFeedbackDialog({
         open: true,
         title: "Erro",

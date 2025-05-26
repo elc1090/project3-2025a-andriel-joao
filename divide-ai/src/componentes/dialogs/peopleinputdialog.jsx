@@ -40,7 +40,7 @@ const PeopleInputDialog = ({ open, onClose, onSubmit }) => {
       return;
     }
 
-    onSubmit(nameList.length, nameList);
+    onSubmit(nameList);
     setNames("");
   };
 
