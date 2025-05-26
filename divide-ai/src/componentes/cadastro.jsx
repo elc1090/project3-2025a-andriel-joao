@@ -126,7 +126,6 @@ const Cadastro = ({navigate}) => {
                           Anterior
                         </Button>
                         <Button type='submit' variant="contained" color='botaoprimario'>Cadastrar</Button>
-                        
                       </ThemeProvider>
                     </Box>
                   </>

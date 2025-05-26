@@ -47,7 +47,7 @@ const QrCode = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post(backendServerUrl+"/purchase", { url: urlInput });
+      const response = await axios.post(backendServerUrl+"/purchase", { url: urlInput }, { withCredentials: true });
       const purchaseData = response.data;
 
       navigate("/table", { state: { url: urlInput, purchaseData } });
