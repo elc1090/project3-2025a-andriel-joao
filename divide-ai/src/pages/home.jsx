@@ -17,18 +17,15 @@ const Home = () => {
   useEffect(() => {
     axios.get(backendServerUrl + '/purchase', { withCredentials: true })
       .then(res => {
-        // Suponha que o retorno esperado seja um array diretamente
         if (Array.isArray(res.data)) {
           setNotas(res.data);
         } else {
-          // Retorno inesperado, evita quebra
           console.warn("Resposta inesperada da API, usando array vazio.");
           setNotas([]);
         }
       })
       .catch(err => {
         console.error("Erro ao buscar notas:", err);
-        // Em caso de erro, ainda usamos array vazio para evitar falha no .map
         setNotas([]);
       });
     }, 

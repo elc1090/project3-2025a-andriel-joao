@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -7,19 +7,40 @@ import {
   TextField,
   Button,
   Box,
+  Typography,
 } from "@mui/material";
 
 const PeopleInputDialog = ({ open, onClose, onSubmit }) => {
-  const [numPeople, setNumPeople] = useState(1);
   const [names, setNames] = useState("");
+  const [nameList, setNameList] = useState([]);
+
+  // Regex: aceita somente se começa e termina com letra ou número
+  const startsAndEndsWithAlphaNum =
+    /^[a-zA-Z0-9áàâãéèêíïóôõöúçÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ].*[a-zA-Z0-9áàâãéèêíïóôõöúçÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ]$/;
+
+  useEffect(() => {
+    const cleanedInput = names.trim();
+    const list = cleanedInput
+      .split(",")
+      .map((n) => n.trim())
+      .filter((n) => n.length > 0);
+    setNameList(list);
+  }, [names]);
 
   const handleConfirm = () => {
-    if (numPeople <= 0 || names.trim() === "") {
-      alert("Por favor, insira um número válido e nomes separados por vírgula.");
+    const cleanedInput = names.trim();
+
+    if (!startsAndEndsWithAlphaNum.test(cleanedInput)) {
+      alert("A lista de nomes deve começar e terminar com letra ou número.");
       return;
     }
-    onSubmit(numPeople, names);
-    setNumPeople(1);
+
+    if (nameList.length === 0) {
+      alert("Por favor, insira pelo menos um nome válido.");
+      return;
+    }
+
+    onSubmit(nameList.length, nameList);
     setNames("");
   };
 
@@ -39,46 +60,41 @@ const PeopleInputDialog = ({ open, onClose, onSubmit }) => {
       </DialogTitle>
 
       <DialogContent>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <TextField
-            label="Quantidade de Devedores"
-            type="number"
-            fullWidth
-            value={numPeople}
-            onChange={(e) => setNumPeople(parseInt(e.target.value))}
-            InputLabelProps={{ style: { color: "white" } }}
-            inputProps={{ min: 1 }}
-            sx={{
-              input: { color: "white" },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: "white" },
-                "&:hover fieldset": { borderColor: "white" },
-              },
-            }}
-          />
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
           <TextField
             label="Nomes (separados por vírgula)"
             fullWidth
             value={names}
+            multiline
+            rows={4}
             onChange={(e) => setNames(e.target.value)}
             InputLabelProps={{ style: { color: "white" } }}
             sx={{
-              input: { color: "white" },
+              color: "white",
+              "& .MuiInputBase-input": {
+                color: "white",
+              },
               "& .MuiOutlinedInput-root": {
                 "& fieldset": { borderColor: "white" },
                 "&:hover fieldset": { borderColor: "white" },
               },
             }}
+            placeholder="Ex: João, Maria, Ana"
           />
+
+          {/* Contador de nomes */}
+          <Typography variant="body2" sx={{ color: "white", fontStyle: "italic", mt: -1 }}>
+            {nameList.length} {nameList.length === 1 ? "pessoa" : "pessoas"} listada{ nameList.length !== 1 ? "s" : "" }.
+          </Typography>
         </Box>
       </DialogContent>
 
-      <DialogActions sx={{ justifyContent: "center", mb: 1 }}>
+      <DialogActions sx={{ justifyContent: "space-around", mb: 1 }}>
         <Button onClick={onClose} variant="outlined" color="inherit">
           Cancelar
         </Button>
-        <Button onClick={handleConfirm} variant="contained" color="inherit">
-          Confirmar
+        <Button onClick={handleConfirm} variant="contained" sx={{ backgroundColor: "white" }}>
+          <p style={{ color: "#006bff", fontFamily: "'Roboto'", margin: 0 }}>Confirmar</p>
         </Button>
       </DialogActions>
     </Dialog>
