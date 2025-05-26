@@ -16,6 +16,7 @@ import NFCDataGrid from "../componentes/nfcgrid";
 import PeopleInputDialog from "../componentes/dialogs/peopleinputdialog";
 import CustomDialog from "../componentes/caixadialogo";
 import { backendServerUrl } from "../config/backendIntegration";
+
 const Table = () => {
   const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -49,10 +50,10 @@ const Table = () => {
     }
 
     try {
-      await axios.put(backendServerUrl +"/purchase", { withCredentials: true }, {
+      await axios.put(backendServerUrl + "/purchase", {
         id: purchaseData.purchaseId,
         payers: peopleNames,
-      });
+      }, { withCredentials: true });
 
       setFeedbackDialog({
         open: true,
@@ -101,11 +102,9 @@ const Table = () => {
       />
 
       <Box sx={{ mt: 10, px: 2 }}>
-        {purchaseData?.items &&
-        purchaseData?.totalValue !== undefined &&
-        people.length > 0 ? (
+        {purchaseData != null && Array.isArray(people) && people.length > 0 ? (
           <NFCDataGrid
-            data={purchaseData.items}
+            data={purchaseData.nfcData.items}
             totalValue={purchaseData.totalValue}
             numPeople={people.length}
             peopleNames={people}

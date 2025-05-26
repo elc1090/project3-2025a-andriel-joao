@@ -62,7 +62,7 @@ const PeopleInputDialog = ({ open, onClose, onSubmit }) => {
       <DialogContent>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
           <TextField
-            label="Nomes (separados por vírgula)"
+            label="Insira os nomes (separados por vírgula)"
             fullWidth
             value={names}
             multiline
@@ -90,7 +90,7 @@ const PeopleInputDialog = ({ open, onClose, onSubmit }) => {
       </DialogContent>
 
       <DialogActions sx={{ justifyContent: "space-around", mb: 1 }}>
-        <Button onClick={onClose} variant="outlined" color="inherit">
+        <Button onClick={onClose} variant="outlined" color="inherit" href="/home">
           Cancelar
         </Button>
         <Button onClick={handleConfirm} variant="contained" sx={{ backgroundColor: "white" }}>

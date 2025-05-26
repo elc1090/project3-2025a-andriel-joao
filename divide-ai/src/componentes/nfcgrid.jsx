@@ -3,6 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import Checkbox from '@mui/material/Checkbox';
 
 const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
+  console.log(data)
   const [selected, setSelected] = useState(() =>
     data.map(() => peopleNames.map(() => false))
   );
