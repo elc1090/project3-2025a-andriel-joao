@@ -15,7 +15,7 @@ import Sidebar from "../util/sidebar";
 import NFCDataGrid from "../componentes/nfcgrid";
 import PeopleInputDialog from "../componentes/dialogs/peopleinputdialog";
 import CustomDialog from "../componentes/caixadialogo";
-
+import { backendServerUrl } from "../config/backendIntegration";
 const Table = () => {
   const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -39,6 +39,7 @@ const Table = () => {
     setDialogOpen(false);
 
     if (!purchaseData?.purchaseId) {
+      console.log("oie 1")
       setFeedbackDialog({
         open: true,
         title: "Erro",
@@ -49,7 +50,7 @@ const Table = () => {
     }
 
     try {
-      await axios.put("/purchase", {
+      await axios.put(backendServerUrl +"/purchase", { withCredentials: true }, {
         id: purchaseData.purchaseId,
         payers: peopleNames,
       });
