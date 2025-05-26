@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { DataGrid } from "@mui/x-data-grid";
 import Checkbox from '@mui/material/Checkbox';
 
-const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
+const NFCGridDesktop = ({ data, totalValue, numPeople, peopleNames}) => {
   const [selected, setSelected] = useState(() =>
     data.map(() => peopleNames.map(() => false))
   );
@@ -31,9 +31,9 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
   };
   
   const columns = useMemo(() => [
-    { field: 'name', headerName: 'Descrição Item', width: 300 },
+    { field: 'index', headerName: 'Index', width: 100 },
+    { field: 'name', headerName: 'Descrição Item', width: 400 },
     { field: 'total_value', headerName: 'Preço total', width: 200 },
-    { field: 'quantity', headerName: 'Quantidade', width: 200 },
     { field: 'all', headerName: 'Todos', width: 100, renderCell: (params) => (
       <Checkbox
         checked={allChecked[params.row.id] || false} // Garante que checked seja booleano
@@ -52,14 +52,13 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
         />
       ),
     })),
-    { field: 'actions', headerName: 'Ações', width: 100 },
   ], [allChecked, peopleNames, selected]);
 
   const rows = useMemo(() => data.map((item, index) => ({
     id: index,
+    index: index + 1,
     name: item.name,
-    total_value: item.totalValue,
-    quantity: item.quantity,
+    total_value: item.total_value,
     selected: selected[index],
     allChecked: allChecked[index],
   })), [data, selected, allChecked]);
@@ -94,7 +93,7 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
 
   return (
     <div>
-      <DataGrid columns={columns} rows={rows} pageSize={10} row />
+      <DataGrid columns={columns} rows={rows} pageSize={5} />
       <div>
         <p>Valor total: {totalValue}</p>
         <p>Número de Pessoas: {numPeople}</p>
@@ -105,4 +104,4 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
     </div>
   );
 };
-export default NFCDataGrid;
+export default NFCGridDesktop;

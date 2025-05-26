@@ -36,7 +36,7 @@ const QrCodeScanner = () => {
     if (result?.text) {
       const url = result.text;
 
-      timerRef.current?.stopTimer(); // para o timer
+      // timerRef.current?.stopTimer(); // para o timer
       setData(url);
       setLoading(true);
 

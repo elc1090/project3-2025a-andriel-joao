@@ -64,7 +64,6 @@ const Login = ({navigate}) => {
     }
 
     const { data: response} = await axios.post(backendServerUrl + "/login", formValues, { withCredentials: true });
-    console.log(response.type);
     if (response.type === "Success") {
        navigate("/home");
     } else {
