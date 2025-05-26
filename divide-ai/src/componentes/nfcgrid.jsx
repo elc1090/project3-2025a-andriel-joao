@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { DataGrid } from "@mui/x-data-grid";
 import Checkbox from '@mui/material/Checkbox';
+import { Accordion, AccordionDetails, AccordionSummary, Box, List, ListItem, Paper, Stack } from '@mui/material';
 
 const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
   const [selected, setSelected] = useState(() =>
@@ -29,63 +30,28 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
     newSelected[rowIndex] = newSelected[rowIndex].map(() => newAllChecked[rowIndex]);
     setSelected(newSelected);
   };
-  
-  const columns = useMemo(() => [
-    { field: 'name', headerName: 'Descrição Item', width: 300 },
-    { field: 'total_value', headerName: 'Preço total', width: 200 },
-    { field: 'quantity', headerName: 'Quantidade', width: 200 },
-    { field: 'all', headerName: 'Todos', width: 100, renderCell: (params) => (
-      <Checkbox
-        checked={allChecked[params.row.id] || false} // Garante que checked seja booleano
-        onChange={() => handleAllChange(params.row.id)}
-      />
-      )
-    },
-    ...peopleNames.map((name, index) => ({
-      field: `person_${index}`,
-      headerName: name,
-      width: 150,
-      renderCell: (params) => (
-        <Checkbox
-          checked={selected[params.row.id][index] || false} // Garante que checked seja sempre booleano
-          onChange={() => handleCheckboxChange(params.row.id, index)}
-        />
-      ),
-    })),
-    { field: 'actions', headerName: 'Ações', width: 100 },
-  ], [allChecked, peopleNames, selected]);
-
-  const rows = useMemo(() => data.map((item, index) => ({
-    id: index,
-    name: item.name,
-    total_value: item.totalValue,
-    quantity: item.quantity,
-    selected: selected[index],
-    allChecked: allChecked[index],
-  })), [data, selected, allChecked]);
-
 
   const calculateTotals = () => {
     const totals = peopleNames.map(() => 0);
     
-    rows.forEach((row) => {
-      const itemTotal = row.total_value;
-      // Verificar se há pessoas selecionadas
-      const checkedPeople = row.allChecked
-        ? peopleNames.map((_, i) => i)
-        : row.selected.map((isChecked, i) => (isChecked ? i : -1)).filter(i => i !== -1);
+    // rows.forEach((row) => {
+    //   const itemTotal = row.total_value;
+    //   // Verificar se há pessoas selecionadas
+    //   const checkedPeople = row.allChecked
+    //     ? peopleNames.map((_, i) => i)
+    //     : row.selected.map((isChecked, i) => (isChecked ? i : -1)).filter(i => i !== -1);
   
-      // Se não houver pessoas selecionadas, ignore este item
-      if (checkedPeople.length === 0) {
-        return;
-      }
-      // Dividir o valor total igualmente entre as pessoas selecionadas
-      const share = itemTotal / checkedPeople.length;
-      // Atualizar o total para cada pessoa
-      checkedPeople.forEach(personIndex => {
-        totals[personIndex] += share;
-      });
-    });
+    //   // Se não houver pessoas selecionadas, ignore este item
+    //   if (checkedPeople.length === 0) {
+    //     return;
+    //   }
+    //   // Dividir o valor total igualmente entre as pessoas selecionadas
+    //   const share = itemTotal / checkedPeople.length;
+    //   // Atualizar o total para cada pessoa
+    //   checkedPeople.forEach(personIndex => {
+    //     totals[personIndex] += share;
+    //   });
+    // });
   
     return totals;
   };
@@ -94,7 +60,45 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
 
   return (
     <div>
-      <DataGrid columns={columns} rows={rows} pageSize={10} row />
+      <List>
+        {data.map((item, index) => (
+          <ListItem key={index}>
+            <Accordion>
+              <AccordionSummary>
+                <strong>{item.name}</strong>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Paper>
+                    <strong>{item.totalValue}</strong>
+                  </Paper>
+                  <Paper>
+                    <strong>{item.quantity}</strong>
+                  </Paper>
+                  <Paper>
+                    <Checkbox
+                      checked={allChecked[index] || false}
+                      onChange={() => handleAllChange(index)}
+                    />
+                    <strong>Todos</strong>
+                  </Paper>
+                  <Paper>
+                    {peopleNames.map((name, indexCheck) => (
+                      <Box>
+                        <Checkbox
+                          checked={selected[index][indexCheck] || false} // Garante que checked seja sempre booleano
+                          onChange={() => handleCheckboxChange(index, indexCheck)}
+                        />
+                        {name}
+                      </Box>
+                    ))}
+                  </Paper>
+                </Stack>
+              </AccordionDetails>
+            </Accordion>
+          </ListItem>
+        ))}
+      </List>
       <div>
         <p>Valor total: {totalValue}</p>
         <p>Número de Pessoas: {numPeople}</p>
