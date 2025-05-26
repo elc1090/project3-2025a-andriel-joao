@@ -41,7 +41,7 @@ const QrCodeScanner = () => {
       setLoading(true);
 
       try {
-        const response = await axios.post(backendServerUrl + '/purchase', { url });
+        const response = await axios.post(backendServerUrl + '/purchase', { url }, { withCredentials: true });
         const purchaseData = response.data;
         navigate('/table', { state: { url, purchaseData } });
       } catch (error) {
