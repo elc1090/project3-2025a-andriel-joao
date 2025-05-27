@@ -3,7 +3,7 @@
 ![Substitua a imagem ao lado por um screenshot do seu projeto](https://mdswanson.com/static/chops-ux-step-4.png "Screenshot do projeto")
 
 
-## [Deply frontend]()
+## [Deply frontend](https://project3-2025a-andriel-joao.vercel.app)
 ## [Deploy backend](https://divide-ai-backend-1.onrender.com)
 
 ### [Repositório Backend](https://github.com/apfmota/divide-ai-backend)🔗
@@ -43,5 +43,3 @@ O projeto iniciou inspirado em projeto já existente realizado para outra discip
 
 ---
 Projeto entregue para a disciplina de [Desenvolvimento de Software para a Web](http://github.com/andreainfufsm/elc1090-2025a) em 2025a
-
-- mudando qualquer coisa para fazer deploy
