@@ -2,13 +2,34 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { DataGrid } from "@mui/x-data-grid";
 import Checkbox from '@mui/material/Checkbox';
 import { Accordion, AccordionDetails, AccordionSummary, Box, List, ListItem, Paper, Stack } from '@mui/material';
+import axios from 'axios';
+import { backendServerUrl } from '../config/backendIntegration';
+
 
 const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
+
+  const updateItems = (items, selected) => {
+    let row = 0;
+    for (let item of items) {
+      const selectedPeople = [];
+      for (let i = 0; i < selected.length; i++) {
+        if (selected[row][i]) {
+          selectedPeople.push(peopleNames[i]);
+        }
+      }
+      axios.put(backendServerUrl + '/item', {
+        id: item.id,
+        payers: selectedPeople
+      }, { withCredentials: true });
+      row++;
+    }
+  }
+
   const [selected, setSelected] = useState(() =>
-    data.map(() => peopleNames.map(() => false))
+    data.map((item) => peopleNames.map((person) => item.payers.includes(person)))
   );
   const [items, setItems] = useState(data);
-  const [allChecked, setAllChecked] = useState(data.map(() => false));
+  const [allChecked, setAllChecked] = useState(data.map((item) => item.payers.length === peopleNames.length));
   
   useEffect(() => {
     setSelected(data.map(() => peopleNames.map(() => false)));
@@ -36,7 +57,7 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
     const totals = peopleNames.map(() => 0);
     
     items.forEach((item, index) => {
-      const itemTotal = item.totalValue;
+      const itemTotal = item.value;
       // Verificar se há pessoas selecionadas
       const checkedPeople = [];
       for (let i = 0; i < peopleNames.length; i++) {
@@ -74,7 +95,7 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
               <AccordionDetails>
                 <Stack direction="row" spacing={2} alignItems="center">
                   <Paper>
-                    <strong>{item.totalValue}</strong>
+                    <strong>{item.value}</strong>
                   </Paper>
                   <Paper>
                     <strong>{item.quantity}</strong>
@@ -109,6 +130,11 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
         {totals.map((total, index) => (
           <p key={index}>{peopleNames[index]} deve: R$ {total.toFixed(2)}</p>
         ))}
+      </div>
+      <div>
+        <button onClick={() => updateItems(items, selected)}>
+          Salvar itens
+        </button>
       </div>
     </div>
   );

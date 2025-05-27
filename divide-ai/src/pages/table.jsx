@@ -21,6 +21,7 @@ const Table = () => {
   const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(true);
+  const [items, setItems] = useState([]);
   const [people, setPeople] = useState([]);
   const [feedbackDialog, setFeedbackDialog] = useState({
     open: false,
@@ -54,6 +55,10 @@ const Table = () => {
         id: purchaseData.purchaseId,
         payers: peopleNames,
       }, { withCredentials: true });
+
+      const itemsData = await axios.get(backendServerUrl + "/purchase?id=" + purchaseData.purchaseId, { withCredentials: true }) 
+      setItems(itemsData.data.items);
+      console.log(itemsData.data.items);
 
       setFeedbackDialog({
         open: true,
@@ -102,9 +107,9 @@ const Table = () => {
       />
 
       <Box sx={{ mt: 10, marginInline: 5, px: 2, maxHeight: '80vh', overflowY: 'auto'}}>
-        {purchaseData != null && Array.isArray(people) && people.length > 0 ? (
+        {purchaseData != null && Array.isArray(people) && people.length > 0  && items.length > 0 ? (
           <NFCDataGrid
-            data={purchaseData.nfcData.items}
+            data={items}
             totalValue={purchaseData.totalValue}
             numPeople={people.length}
             peopleNames={people}
