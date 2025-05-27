@@ -110,7 +110,7 @@ const Table = () => {
         {purchaseData != null && Array.isArray(people) && people.length > 0  && items.length > 0 ? (
           <NFCDataGrid
             data={items}
-            totalValue={purchaseData.totalValue}
+            totalValue={purchaseData.nfcData.totalValue}
             numPeople={people.length}
             peopleNames={people}
           />

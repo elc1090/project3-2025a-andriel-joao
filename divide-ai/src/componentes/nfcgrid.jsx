@@ -37,10 +37,16 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames }) => {
     }
   };
 
-  const [selected, setSelected] = useState(data.map((item) => peopleNames.map((person) => item.payers.includes(person))));
+  const [selected, setSelected] = useState(
+    data.map((item) =>
+      peopleNames.map((person) => item.payers.includes(person))
+    )
+  );
   const [items, setItems] = useState(data);
-  const [allChecked, setAllChecked] = useState(data.map((item) => item.payers.length === peopleNames.length));
-  
+  const [allChecked, setAllChecked] = useState(
+    data.map((item) => item.payers.length === peopleNames.length)
+  );
+
   const handleCheckboxChange = (rowIndex, personIndex) => {
     const newSelected = [...selected];
     newSelected[rowIndex][personIndex] = !newSelected[rowIndex][personIndex];
@@ -110,28 +116,62 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames }) => {
                 </strong>
               </AccordionSummary>
               <AccordionDetails sx={{ backgroundColor: "rgb(255, 255, 255)" }}>
-                <Stack direction="row" spacing={2} alignItems="center">
-                  <Paper>
-                    <strong>{item.value}</strong>
-                  </Paper>
-                  <Paper>
-                    <strong>{item.quantity}</strong>
-                  </Paper>
-                  <Paper>
-                    <Checkbox
-                      checked={allChecked[index] || false}
-                      onChange={() => handleAllChange(index)}
-                    />
-                    <strong>Todos</strong>
-                  </Paper>
-                  <Paper>
+                <Stack direction="column" spacing={2} alignItems="center">
+                  <Box sx={{ display: "flex" }}>
+                    <Box sx={{ display: "flex", mr: 4 }}>
+                      <p
+                        style={{
+                          fontFamily: "'Roboto'",
+                          fontSize: 15,
+                          color: "#006bff",
+                        }}
+                      >
+                        Preço Un/Kg: <strong>{item.value} R$</strong>
+                      </p>
+                    </Box>
+                    <Box sx={{ display: "flex" }}>
+                      <p
+                        style={{
+                          fontFamily: "'Roboto'",
+                          fontSize: 15,
+                          color: "#006bff",
+                        }}
+                      >
+                        Quantidade: <strong>{item.quantity}</strong>
+                      </p>
+                    </Box>
+                  </Box>
+                  <Box sx={{ display: "flex" }}>
+                    <Box sx={{ display: "flex", mr: 5 }}>
+                      <Checkbox
+                        sx={{
+                          color: "#006bff",
+                          "&.Mui-checked": {
+                            color: "#006bff",
+                          },
+                        }}
+                        checked={allChecked[index] || false}
+                        onChange={() => handleAllChange(index)}
+                      />
+                      <Box sx={{ mt: 1.3 }}>
+                        <p
+                          style={{
+                            fontFamily: "'Roboto'",
+                            fontSize: 15,
+                            color: "#006bff",
+                          }}
+                        >
+                          Todos pagam
+                        </p>
+                      </Box>
+                    </Box>
                     <DropdownCheckboxes
                       rowIndex={index}
                       selected={selected}
                       onChange={handleCheckboxChange}
                       peopleNames={peopleNames}
                     />
-                  </Paper>
+                  </Box>
                 </Stack>
               </AccordionDetails>
             </Accordion>
