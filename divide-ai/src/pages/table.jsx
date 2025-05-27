@@ -106,7 +106,7 @@ const Table = () => {
         onSubmit={handleDialogSubmit}
       />
 
-      <Box sx={{ mt: 10, marginInline: 5, px: 2, maxHeight: '80vh', overflowY: 'auto'}}>
+      <Box sx={{ mt: 10, px: 2, maxHeight: '80vh', overflowY: 'auto'}}>
         {purchaseData != null && Array.isArray(people) && people.length > 0  && items.length > 0 ? (
           <NFCDataGrid
             data={items}

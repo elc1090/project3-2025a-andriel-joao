@@ -1,13 +1,21 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import Checkbox from '@mui/material/Checkbox';
-import { Accordion, AccordionDetails, AccordionSummary, Box, List, ListItem, Paper, Stack } from '@mui/material';
-import axios from 'axios';
-import { backendServerUrl } from '../config/backendIntegration';
+import Checkbox from "@mui/material/Checkbox";
+import DropdownCheckboxes from "../util/menudropdown";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  List,
+  ListItem,
+  Paper,
+  Stack,
+} from "@mui/material";
+import axios from "axios";
+import { backendServerUrl } from "../config/backendIntegration";
 
-
-const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
-
+const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames }) => {
   const updateItems = (items, selected) => {
     let row = 0;
     for (let item of items) {
@@ -17,20 +25,28 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
           selectedPeople.push(peopleNames[i]);
         }
       }
-      axios.put(backendServerUrl + '/item', {
-        id: item.id,
-        payers: selectedPeople
-      }, { withCredentials: true });
+      axios.put(
+        backendServerUrl + "/item",
+        {
+          id: item.id,
+          payers: selectedPeople,
+        },
+        { withCredentials: true }
+      );
       row++;
     }
-  }
+  };
 
   const [selected, setSelected] = useState(() =>
-    data.map((item) => peopleNames.map((person) => item.payers.includes(person)))
+    data.map((item) =>
+      peopleNames.map((person) => item.payers.includes(person))
+    )
   );
   const [items, setItems] = useState(data);
-  const [allChecked, setAllChecked] = useState(data.map((item) => item.payers.length === peopleNames.length));
-  
+  const [allChecked, setAllChecked] = useState(
+    data.map((item) => item.payers.length === peopleNames.length)
+  );
+
   useEffect(() => {
     setSelected(data.map(() => peopleNames.map(() => false)));
     setAllChecked(data.map(() => false));
@@ -49,13 +65,15 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
 
     const newSelected = [...selected];
     // Atualizar todos os checkboxes da linha quando "Todos" for clicado
-    newSelected[rowIndex] = newSelected[rowIndex].map(() => newAllChecked[rowIndex]);
+    newSelected[rowIndex] = newSelected[rowIndex].map(
+      () => newAllChecked[rowIndex]
+    );
     setSelected(newSelected);
   };
 
   const calculateTotals = () => {
     const totals = peopleNames.map(() => 0);
-    
+
     items.forEach((item, index) => {
       const itemTotal = item.value;
       // Verificar se há pessoas selecionadas
@@ -65,7 +83,7 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
           checkedPeople.push(i);
         }
       }
-  
+
       // Se não houver pessoas selecionadas, ignore este item
       if (checkedPeople.length === 0) {
         return;
@@ -73,11 +91,11 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
       // Dividir o valor total igualmente entre as pessoas selecionadas
       const share = itemTotal / checkedPeople.length;
       // Atualizar o total para cada pessoa
-      checkedPeople.forEach(personIndex => {
+      checkedPeople.forEach((personIndex) => {
         totals[personIndex] += share;
       });
     });
-  
+
     return totals;
   };
 
@@ -88,11 +106,21 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
       <List>
         {data.map((item, index) => (
           <ListItem key={index}>
-            <Accordion>
+            <Accordion
+              sx={{
+                width: 400,
+                backgroundColor: selected[index].some(Boolean)
+                  ? "#0045A4"
+                  : "#006bff",
+                transition: "background-color 0.3s ease",
+              }}
+            >
               <AccordionSummary>
-                <strong>{item.name}</strong>
+                <strong style={{ fontFamily: "'Roboto'", color: "white" }}>
+                  {item.name}
+                </strong>
               </AccordionSummary>
-              <AccordionDetails>
+              <AccordionDetails sx={{ backgroundColor: "rgb(255, 255, 255)" }}>
                 <Stack direction="row" spacing={2} alignItems="center">
                   <Paper>
                     <strong>{item.value}</strong>
@@ -108,15 +136,12 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
                     <strong>Todos</strong>
                   </Paper>
                   <Paper>
-                    {peopleNames.map((name, indexCheck) => (
-                      <Box>
-                        <Checkbox
-                          checked={selected[index][indexCheck] || false} // Garante que checked seja sempre booleano
-                          onChange={() => handleCheckboxChange(index, indexCheck)}
-                        />
-                        {name}
-                      </Box>
-                    ))}
+                    <DropdownCheckboxes
+                      rowIndex={index}
+                      selected={selected}
+                      onChange={handleCheckboxChange}
+                      peopleNames={peopleNames}
+                    />
                   </Paper>
                 </Stack>
               </AccordionDetails>
@@ -128,7 +153,9 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
         <p>Valor total: {totalValue}</p>
         <p>Número de Pessoas: {numPeople}</p>
         {totals.map((total, index) => (
-          <p key={index}>{peopleNames[index]} deve: R$ {total.toFixed(2)}</p>
+          <p key={index}>
+            {peopleNames[index]} deve: R$ {total.toFixed(2)}
+          </p>
         ))}
       </div>
       <div>
