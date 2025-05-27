@@ -1,6 +1,6 @@
-import React, {useState} from "react";
-import { Button, Menu, MenuItem } from '@mui/material';
-import Checkbox from "@mui/material";
+import React, { useState } from "react";
+import { Button, Menu, MenuItem, Checkbox } from '@mui/material';
+
 const DropdownCheckboxes = ({ rowIndex, selected, onChange, peopleNames }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
