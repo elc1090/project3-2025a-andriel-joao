@@ -16,6 +16,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SaveIcon from "@mui/icons-material/Save";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import axios from "axios";
+import { backendServerUrl } from "../config/backendIntegration";
 
 const theme = createTheme({
   palette: {
@@ -39,7 +40,7 @@ const Profile = () => {
 
   const getUserData = async () => {
     try {
-      const response = await axios.get("/api/usuario");
+      const response = await axios.get(backendServerUrl + "/user", { withCredentials: true });
       const data = response?.data || {};
       setUserData({
         username: data.username || "",
@@ -76,11 +77,11 @@ const Profile = () => {
 
     setSenhaErro(false);
     try {
-      await axios.put("/api/usuario", {
+      await axios.post(backendServerUrl +  "/user", {
         username: userData.username,
         email: userData.email,
-        senha: userData.senha,
-      });
+        password: userData.senha,
+      }, { withCredentials: true });
       alert("Dados atualizados com sucesso!");
       setUserData({ ...userData, senha: "", confirmarSenha: "" });
     } catch (error) {
