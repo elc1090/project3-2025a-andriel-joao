@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { backendServerUrl } from "../config/backendIntegration";
 import NFCDataGrid from "../componentes/nfcgrid";
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, CssBaseline, IconButton, Toolbar, Typography } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import Sidebar from "../util/sidebar";
 
@@ -24,21 +24,9 @@ const ViewPurchase = () => {
 
 
 	return (
-		<>
-			<CssBaseline />	
-			
-			<Box
-				sx={{
-				  overflowX: "hidden",
-				  backgroundImage: "url(/login-background-image.jpg)",
-				  backgroundSize: "cover",
-				  backgroundPosition: "center",
-				  backgroundRepeat: "no-repeat",
-				  display: "grid",
-				  textAlign: "center",
-				  justifyContent: "center",
-				}}
-			  >
+		<>	
+			<Box sx={{ mt: 10, px: 2}}>
+	
 				<AppBar position="fixed" sx={{ backgroundColor: "#006bff" }}>
 					<Toolbar>
 					<IconButton
