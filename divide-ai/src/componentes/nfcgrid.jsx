@@ -25,16 +25,9 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
     }
   }
 
-  const [selected, setSelected] = useState(() =>
-    data.map((item) => peopleNames.map((person) => item.payers.includes(person)))
-  );
+  const [selected, setSelected] = useState(data.map((item) => peopleNames.map((person) => item.payers.includes(person))));
   const [items, setItems] = useState(data);
   const [allChecked, setAllChecked] = useState(data.map((item) => item.payers.length === peopleNames.length));
-  
-  useEffect(() => {
-    setSelected(data.map(() => peopleNames.map(() => false)));
-    setAllChecked(data.map(() => false));
-  }, [data, totalValue, numPeople, peopleNames]);
 
   const handleCheckboxChange = (rowIndex, personIndex) => {
     const newSelected = [...selected];

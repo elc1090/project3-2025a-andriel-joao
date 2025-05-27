@@ -1,6 +1,8 @@
 import { Box, Typography } from "@mui/material";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Purchases = ({purchases}) => {
+    const navigate = useNavigate();
     return (
         <Box
             sx={{
@@ -23,6 +25,7 @@ const Purchases = ({purchases}) => {
                 {purchases.length != 0 ? (
                 purchases.map((purchase, idx) => (
                     <Box
+                    onClick={() => navigate('/view-purchase', { state: { purchaseId: purchase.id } })}
                     key={idx}
                     sx={{
                         mb: 2,
