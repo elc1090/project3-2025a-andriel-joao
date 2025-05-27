@@ -10,10 +10,18 @@ import {
   List,
   ListItem,
   Paper,
+  Button,
   Stack,
 } from "@mui/material";
 import axios from "axios";
 import { backendServerUrl } from "../config/backendIntegration";
+import SaveIcon from '@mui/icons-material/Save';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+const paragraph_style = {
+  fontFamily: "Roboto, sans-serif",
+  fontSize: 19,
+  color: "#006bff",
+};
 
 const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames }) => {
   const updateItems = (items, selected) => {
@@ -98,7 +106,7 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames }) => {
 
   return (
     <div>
-      <List sx={{maxHeight: '100vh', overflowY: 'auto'}}>
+      <List sx={{ maxHeight: "100vh", overflowY: "auto" }}>
         {data.map((item, index) => (
           <ListItem key={index}>
             <Accordion
@@ -110,7 +118,7 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames }) => {
                 transition: "background-color 0.3s ease",
               }}
             >
-              <AccordionSummary>
+              <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "white"}}/> } >
                 <strong style={{ fontFamily: "'Roboto'", color: "white" }}>
                   {item.name}
                 </strong>
@@ -119,24 +127,12 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames }) => {
                 <Stack direction="column" spacing={2} alignItems="center">
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ display: "flex", mr: 4 }}>
-                      <p
-                        style={{
-                          fontFamily: "'Roboto'",
-                          fontSize: 15,
-                          color: "#006bff",
-                        }}
-                      >
+                      <p style={paragraph_style}>
                         Preço Un/Kg: <strong>{item.value} R$</strong>
                       </p>
                     </Box>
                     <Box sx={{ display: "flex" }}>
-                      <p
-                        style={{
-                          fontFamily: "'Roboto'",
-                          fontSize: 15,
-                          color: "#006bff",
-                        }}
-                      >
+                      <p style={paragraph_style}>
                         Quantidade: <strong>{item.quantity}</strong>
                       </p>
                     </Box>
@@ -154,15 +150,7 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames }) => {
                         onChange={() => handleAllChange(index)}
                       />
                       <Box sx={{ mt: 1.3 }}>
-                        <p
-                          style={{
-                            fontFamily: "'Roboto'",
-                            fontSize: 15,
-                            color: "#006bff",
-                          }}
-                        >
-                          Todos pagam
-                        </p>
+                        <p style={paragraph_style}>Todos pagam</p>
                       </Box>
                     </Box>
                     <DropdownCheckboxes
@@ -177,21 +165,54 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames }) => {
             </Accordion>
           </ListItem>
         ))}
-        <ListItem sx={{ position: "sticky", bottom: 80, backgroundColor: "#f0f0f0" }}>
-          <div>
-            <p>Valor total: {totalValue}</p>
-            <p>Número de Pessoas: {numPeople}</p>
-            {totals.map((total, index) => (
-              <p key={index}>
-                {peopleNames[index]} deve: R$ {total.toFixed(2)}
+        <ListItem
+          sx={{ position: "sticky", bottom: 70, backgroundColor: "#006bff" }}
+        >
+          <Accordion
+            sx={{
+              width: 400,
+              backgroundColor: "#006bff",
+              transition: "background-color 0.3s ease",
+            }}
+          >
+            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "white"}} />}>
+              <p
+                style={{
+                  fontFamily: "'Jersey 15'",
+                  fontSize: 30,
+                  color: "white",
+                }}
+              >
+                divisao final
               </p>
-            ))}
-          </div>
-          <div>
-            <button onClick={() => updateItems(items, selected)}>
-              Salvar itens
-            </button>
-          </div>
+            </AccordionSummary>
+            <AccordionDetails sx={{ backgroundColor: "rgb(255, 255, 255)" }}>
+              <div>
+                <div style={{ marginBottom: 10 }}>
+                  <p style={paragraph_style}>
+                    <strong>VALOR TOTAL GASTO: R$ {totalValue}</strong>
+                  </p>
+                </div>
+                <div style={{ marginBottom: 10, display: "column", gap: 10 }}>
+                  <p style={paragraph_style}>
+                    <strong>NÚMERO DE PESSOAS: {numPeople}</strong>
+                  </p>
+                  {totals.map((total, index) => (
+                    <p style={paragraph_style} key={index}>
+                      <strong>
+                        {peopleNames[index]} DEVE: R$ {total.toFixed(2)}
+                      </strong>
+                    </p>
+                  ))}
+                </div>
+              </div>
+              <div style={{textAlign: "end"}}>
+                <Button startIcon={<SaveIcon />} size="medium" variant="contained" sx={{ textTransform: "none", color: "white", backgroundColor: "#006bff" }} onClick={() => updateItems(items, selected)}>
+                  SALVAR ITEM
+                </Button>
+              </div>
+            </AccordionDetails>
+          </Accordion>
         </ListItem>
       </List>
     </div>
