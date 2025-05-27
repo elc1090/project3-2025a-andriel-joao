@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { BorderAllOutlined } from '@mui/icons-material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import axios from 'axios';
+import { backendServerUrl } from '../config/backendIntegration';
 
 const botaoEstilo = {
   justifyContent: "flex-start",
@@ -111,6 +113,10 @@ const Sidebar = ({ drawerOpen, setDrawerOpen }) => {
           </List>
           
           <Button
+            onClick={() => {
+              axios.get(backendServerUrl + "/logout", { withCredentials: true });
+              navigate('/');
+            }}
             color='error'
             size='large'
             variant='contained'
