@@ -17,37 +17,6 @@ import PeopleInputDialog from "../componentes/dialogs/peopleinputdialog";
 import CustomDialog from "../componentes/caixadialogo";
 import { backendServerUrl } from "../config/backendIntegration";
 
-const mockItems = [
-  {
-    name: "OVO VERM.GD",
-    totalValue: 12.9,
-    quantity: "1",
-    unit: " BDJ7",
-  },
-  {
-    name: "CR.DENTAL COLGATE",
-    totalValue: 6.98,
-    quantity: "1",
-    unit: " UND9",
-  },
-  {
-    name: "LA ACO ASSOLAN",
-    totalValue: 1.89,
-    quantity: "1",
-    unit: " UND9",
-  },
-  {
-    name: "ESPONJA BOMBRIL L4P3",
-    totalValue: 4.49,
-    quantity: "1",
-    unit: " UND9",
-  },
-];
-
-const mockTotalValue = 12.9 + 6.98 + 1.89 + 4.49; // 58.86
-
-const mockPeople = ["Alice", "Bob", "Carlos"]; // .length = 3
-
 const Table = () => {
   const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -64,7 +33,6 @@ const Table = () => {
   const { purchaseData } = location.state || {};
 
   const handleDialogClose = () => {
-    setDialogOpen(false);
     // Não fecha sem submissão
   };
 
@@ -77,25 +45,18 @@ const Table = () => {
         open: true,
         title: "Erro",
         content: "ID da compra não encontrado.",
-        iconSrc: "/caution.png",
+        iconSrc: "/caution.png", 
       });
       return;
     }
 
     try {
-      await axios.put(
-        backendServerUrl + "/purchase",
-        {
-          id: purchaseData.purchaseId,
-          payers: peopleNames,
-        },
-        { withCredentials: true }
-      );
+      await axios.put(backendServerUrl + "/purchase", {
+        id: purchaseData.purchaseId,
+        payers: peopleNames,
+      }, { withCredentials: true });
 
-      const itemsData = await axios.get(
-        backendServerUrl + "/purchase?id=" + purchaseData.purchaseId,
-        { withCredentials: true }
-      );
+      const itemsData = await axios.get(backendServerUrl + "/purchase?id=" + purchaseData.purchaseId, { withCredentials: true }) 
       setItems(itemsData.data.items);
       console.log(itemsData.data.items);
 
@@ -145,16 +106,13 @@ const Table = () => {
         onSubmit={handleDialogSubmit}
       />
 
-      <Box sx={{ mt: 10, px: 2 }}>
-        {purchaseData != null &&
-        Array.isArray(people) &&
-        people.length > 0 &&
-        items.length > 0 ? (
+      <Box sx={{ mt: 10, px: 2}}>
+        {purchaseData != null && Array.isArray(people) && people.length > 0  && items.length > 0 ? (
           <NFCDataGrid
-            data={mockItems}
-            totalValue={mockTotalValue}
-            numPeople={mockPeople.length}
-            peopleNames={mockPeople}
+            data={items}
+            totalValue={purchaseData.nfcData.totalValue}
+            numPeople={people.length}
+            peopleNames={people}
           />
         ) : (
           <Box
@@ -186,17 +144,9 @@ const Table = () => {
         content={feedbackDialog.content}
         iconSrc={feedbackDialog.iconSrc}
         actions={[
-          <Button
-            onClick={() =>
-              setFeedbackDialog({ ...feedbackDialog, open: false })
-            }
-            variant="contained"
-            sx={{ backgroundColor: "white" }}
-          >
-            <p style={{ color: "#006bff", fontFamily: "'Roboto'", margin: 0 }}>
-              OK
-            </p>
-          </Button>,
+          <Button onClick={() => setFeedbackDialog({ ...feedbackDialog, open: false })} variant="contained" sx={{ backgroundColor: "white" }}>
+            <p style={{ color: "#006bff", fontFamily: "'Roboto'", margin: 0 }}>OK</p>
+          </Button>
         ]}
       />
     </Box>
