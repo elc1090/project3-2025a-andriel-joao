@@ -7,6 +7,7 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
   const [selected, setSelected] = useState(() =>
     data.map(() => peopleNames.map(() => false))
   );
+  const [items, setItems] = useState(data);
   const [allChecked, setAllChecked] = useState(data.map(() => false));
   
   useEffect(() => {
@@ -34,24 +35,27 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames}) => {
   const calculateTotals = () => {
     const totals = peopleNames.map(() => 0);
     
-    // rows.forEach((row) => {
-    //   const itemTotal = row.total_value;
-    //   // Verificar se há pessoas selecionadas
-    //   const checkedPeople = row.allChecked
-    //     ? peopleNames.map((_, i) => i)
-    //     : row.selected.map((isChecked, i) => (isChecked ? i : -1)).filter(i => i !== -1);
+    items.forEach((item, index) => {
+      const itemTotal = item.totalValue;
+      // Verificar se há pessoas selecionadas
+      const checkedPeople = [];
+      for (let i = 0; i < peopleNames.length; i++) {
+        if (selected[index][i]) {
+          checkedPeople.push(i);
+        }
+      }
   
-    //   // Se não houver pessoas selecionadas, ignore este item
-    //   if (checkedPeople.length === 0) {
-    //     return;
-    //   }
-    //   // Dividir o valor total igualmente entre as pessoas selecionadas
-    //   const share = itemTotal / checkedPeople.length;
-    //   // Atualizar o total para cada pessoa
-    //   checkedPeople.forEach(personIndex => {
-    //     totals[personIndex] += share;
-    //   });
-    // });
+      // Se não houver pessoas selecionadas, ignore este item
+      if (checkedPeople.length === 0) {
+        return;
+      }
+      // Dividir o valor total igualmente entre as pessoas selecionadas
+      const share = itemTotal / checkedPeople.length;
+      // Atualizar o total para cada pessoa
+      checkedPeople.forEach(personIndex => {
+        totals[personIndex] += share;
+      });
+    });
   
     return totals;
   };
