@@ -63,6 +63,7 @@ const Cadastro = ({navigate}) => {
     console.log(response);
     console.log("cadastrando... 🔍");
     if (response.type === "Success") {
+      alert("cadastro realizado com sucesso");
       navigate("/");
     } else {
       alert(response.message);
