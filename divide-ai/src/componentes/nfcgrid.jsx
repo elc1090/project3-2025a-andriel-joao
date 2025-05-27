@@ -98,7 +98,7 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames }) => {
 
   return (
     <div>
-      <List>
+      <List sx={{maxHeight: '100vh', overflowY: 'auto'}}>
         {data.map((item, index) => (
           <ListItem key={index}>
             <Accordion
@@ -177,21 +177,23 @@ const NFCDataGrid = ({ data, totalValue, numPeople, peopleNames }) => {
             </Accordion>
           </ListItem>
         ))}
+        <ListItem sx={{ position: "sticky", bottom: 80, backgroundColor: "#f0f0f0" }}>
+          <div>
+            <p>Valor total: {totalValue}</p>
+            <p>Número de Pessoas: {numPeople}</p>
+            {totals.map((total, index) => (
+              <p key={index}>
+                {peopleNames[index]} deve: R$ {total.toFixed(2)}
+              </p>
+            ))}
+          </div>
+          <div>
+            <button onClick={() => updateItems(items, selected)}>
+              Salvar itens
+            </button>
+          </div>
+        </ListItem>
       </List>
-      <div>
-        <p>Valor total: {totalValue}</p>
-        <p>Número de Pessoas: {numPeople}</p>
-        {totals.map((total, index) => (
-          <p key={index}>
-            {peopleNames[index]} deve: R$ {total.toFixed(2)}
-          </p>
-        ))}
-      </div>
-      <div>
-        <button onClick={() => updateItems(items, selected)}>
-          Salvar itens
-        </button>
-      </div>
     </div>
   );
 };
