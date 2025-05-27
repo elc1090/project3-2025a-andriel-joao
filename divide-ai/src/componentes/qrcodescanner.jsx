@@ -59,7 +59,7 @@ const QrCodeScanner = () => {
   };
 
   return (
-    <Box sx={{ mt: 5 }}>
+    <Box>
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <CircularProgress color="inherit" />

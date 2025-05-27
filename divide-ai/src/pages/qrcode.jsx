@@ -22,6 +22,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { backendServerUrl } from "../config/backendIntegration";
+import CustomDialog from "../componentes/caixadialogo";
 const theme = createTheme({
   palette: {
     botaoprimario: {
@@ -47,9 +48,13 @@ const QrCode = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post(backendServerUrl+"/purchase", { url: urlInput }, { withCredentials: true });
+      const response = await axios.post(
+        backendServerUrl + "/purchase",
+        { url: urlInput },
+        { withCredentials: true }
+      );
       const purchaseData = response.data;
-      console.log(purchaseData)
+      console.log(purchaseData);
       navigate("/table", { state: { url: urlInput, purchaseData } });
     } catch (err) {
       setUrlError("Erro ao extrair dados da nota. Verifique a URL.");
@@ -132,9 +137,11 @@ const QrCode = () => {
         </Box>
       </Box>
 
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>Insira a URL da nota fiscal</DialogTitle>
-        <DialogContent>
+      <CustomDialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        title="Insira a URL da nota fiscal"
+        customContent={
           <TextField
             autoFocus
             fullWidth
@@ -148,17 +155,38 @@ const QrCode = () => {
             }}
             error={!!urlError}
             helperText={urlError}
+            sx={{
+              color: "white",
+              "& .MuiInputBase-input": {
+                color: "white",
+              },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "white" },
+                "&:hover fieldset": { borderColor: "white" },
+              }}
+            }
           />
-        </DialogContent>
-        <DialogActions sx={{ justifyContent: "space-between", px: 3 }}>
-          <Button onClick={() => setOpenDialog(false)} color="error">
+        }
+        actions={[
+          <Button
+            onClick={() => setOpenDialog(false)}
+            color="inherit"
+            variant="outlined"
+             href="/home"
+          >
             Cancelar
+          </Button>,
+          <Button
+            onClick={handleUrlSubmit}
+            disabled={loading}
+            color="botaoprimario"
+            variant="contained"
+            sx={{ backgroundColor: "white" }}
+          >
+            <p style={{ color: "#006bff", fontFamily: "'Roboto'", margin: 0 }}>{loading ? "Validando..." : "Confirmar"}</p>
           </Button>
-          <Button onClick={handleUrlSubmit} disabled={loading}>
-            {loading ? "Validando..." : "Confirmar"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        ]}
+      />
     </>
   );
 };

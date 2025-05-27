@@ -46,6 +46,7 @@ const CssTextField = styled(TextField)({
 const Cadastro = ({navigate}) => {
 
   const [step, setStep] = useState(0);
+  const [loading, setLoading] = React.useState(false);
 
   const handleNext = () => {
     setStep((prev) => Math.min(prev + 1, 1));
@@ -58,16 +59,17 @@ const Cadastro = ({navigate}) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     //lidar cadastro etc
-
+    setLoading(true);
     const {data: response} = await axios.post(backendServerUrl + "/register", formData);
     console.log(response);
     console.log("cadastrando... 🔍");
     if (response.type === "Success") {
       alert("cadastro realizado com sucesso");
-      navigate("/");
+      window.location.reload();
     } else {
       alert(response.message);
     }
+    setLoading(false);
   };
 
   const [formData, setFormData] = useState({
@@ -127,7 +129,14 @@ const Cadastro = ({navigate}) => {
                         <Button variant="outlined" color='botaoprimario' onClick={handleBack} startIcon={<ArrowBackIcon />}>
                           Anterior
                         </Button>
-                        <Button type='submit' variant="contained" color='botaoprimario'>Cadastrar</Button>
+                        <Button
+                          type="submit"
+                          color="botaoprimario"
+                          variant="contained"
+                          disabled={loading}
+                        >
+                          {loading ? "Cadastrando..." : "Cadastrar"}
+                        </Button>
                       </ThemeProvider>
                     </Box>
                   </>
