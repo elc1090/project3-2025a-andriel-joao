@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Container, Button, Paper } from '@mui/material';
-import Cadastro from '../componentes/Cadastro';
-import Login from '../componentes/Login';
+import Cadastro from '../componentes/cadastro';
+import Login from '../componentes/login';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import { useNavigate } from 'react-router-dom';
 const AuthPage = () => {
