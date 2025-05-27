@@ -43,3 +43,5 @@ O projeto iniciou inspirado em projeto já existente realizado para outra discip
 
 ---
 Projeto entregue para a disciplina de [Desenvolvimento de Software para a Web](http://github.com/andreainfufsm/elc1090-2025a) em 2025a
+
+- mudando qualquer coisa para fazer deploy
