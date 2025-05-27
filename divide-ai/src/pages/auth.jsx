@@ -52,7 +52,7 @@ const AuthPage = () => {
           <Button
             variant="outlined"
             fullWidth
-            sx={{ borderColor: "white", color: "white" }}
+            sx={{ borderColor: "white", color: "white"}}
             onClick={() => handleEscolha("cadastro")}
           >
             <p style={{ color: "white", fontFamily: "'Roboto'" }}>Cadastrar</p>
@@ -67,7 +67,7 @@ const AuthPage = () => {
         className={direction === "left" ? "fade-slide-left" : "fade-slide-right"}
       >
         {etapa === "login" ? <Login navigate={navigate} /> : <Cadastro navigate={navigate} />}
-        <Button variant="text" sx={{ mt: 2, color: "white" }} onClick={handleVoltar} endIcon={<KeyboardReturnIcon/>}>
+        <Button variant="text" sx={{ color: "white" }} onClick={handleVoltar} endIcon={<KeyboardReturnIcon/>}>
           Home
         </Button>
       </Box>
@@ -87,7 +87,7 @@ const AuthPage = () => {
         justifyContent: "center",
       }}
     >
-      <Container maxWidth="xs">
+      <Container maxWidth="xs" sx={{pb: 12}}>
         <Paper
           elevation={4}
           sx={{
