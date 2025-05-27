@@ -78,7 +78,7 @@ const AuthPage = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        backgroundImage: "url(../../public/login-background-image.jpg)",
+        backgroundImage: "url(/login-background-image.jpg)",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
